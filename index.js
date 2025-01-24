@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const adminRouter=require("./Firebase/adminRouter")
 const path = require("path");
 const connectDB = require("./Config/dbConfig");
 require("dotenv").config();
@@ -20,6 +21,8 @@ app.use(
 );
 
 app.use(express.json());
+
+app.use('/api',adminRouter)
 
 //  Home route
 app.get("/", (req, res) => {
