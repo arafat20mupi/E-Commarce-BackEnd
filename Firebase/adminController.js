@@ -1,4 +1,32 @@
-const {getAllUsers}=require("./firebaseAdmin")
+const admin = require("./firebaseAdmin")
+
+const getAllUsers = async () => {
+  try {
+    // Fetch all users using the listUsers method
+    const userData = await admin.auth().listUsers();
+
+    // Ensure that userData and userData.users exist before calling map
+    if (userData && userData.users) {
+      const users = await Promise.all(
+        userData.users.map(async (user) => {
+          const { customClaims } = await admin.auth().getUser(user.uid); // Corrected the property name
+          return {
+            uid: user.uid,
+            email: user.email,
+            role: customClaims?.role || "user", // Fetch role or set default as "user"
+          };
+        })
+      );
+      return users; // Return the resolved users array
+    } else {
+      throw new Error("No users found.");
+    }
+  } catch (error) {
+    console.error("Error fetching users:", error.message);
+    throw error; // Rethrow the error to be handled in the controller
+  }
+};
+
 
 exports.allUsers=async(req,res)=>{
     try {
@@ -8,3 +36,21 @@ exports.allUsers=async(req,res)=>{
         res.status(500).json({ error: "Error fetching users" });
       }
 }
+
+exports.updateRole = async (req, res) => {
+  const { uid, role } = req.body;
+
+  if (!uid || !role) {
+    return res.status(400).json({ error: "UID and role are required" });
+  }
+
+  try {
+    // Update custom claims for the user
+    await admin.auth().setCustomUserClaims(uid, { role });
+
+    res.status(200).send({ message: `Role updated to ${role} for user ${uid}` });
+  } catch (error) {
+    console.error("Error updating role:", error);
+    res.status(500).send({ message: "Failed to update role", error: error.message });
+  }
+};
