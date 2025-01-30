@@ -54,3 +54,19 @@ exports.updateRole = async (req, res) => {
     res.status(500).send({ message: "Failed to update role", error: error.message });
   }
 };
+
+exports.deleteUser = async (req, res) => {
+  const { uid } = req.params;
+
+  if (!uid) {
+    return res.status(400).json({ error: "UID is required" });
+  }
+
+  try {
+    await admin.auth().deleteUser(uid);
+    res.status(200).json({ message: `User with UID ${uid} deleted successfully` });
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({ message: "Failed to delete user", error: error.message });
+  }
+};
