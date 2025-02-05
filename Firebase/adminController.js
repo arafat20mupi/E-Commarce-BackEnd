@@ -13,7 +13,9 @@ const getAllUsers = async () => {
           return {
             uid: user.uid,
             email: user.email,
+            name: user.displayName || "No Name",
             role: customClaims?.role || "user", // Fetch role or set default as "user"
+            lastActive: user.metadata?.lastSignInTime || "Never",
           };
         })
       );
