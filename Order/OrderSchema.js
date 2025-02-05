@@ -16,7 +16,6 @@ const OrderSchema = new mongoose.Schema(
         },
         phone: {
             type: String,
-            required: true,
         },
         items: [
             {
@@ -36,6 +35,12 @@ const OrderSchema = new mongoose.Schema(
                     type: Number,
                     required: true,
                 },
+                size : {
+                    type: String,
+                },
+                color: {
+                    type: String,
+                }
             },
         ],
         totalPrice: {
