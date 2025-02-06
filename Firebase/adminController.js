@@ -1,43 +1,50 @@
-const admin = require("./firebaseAdmin")
+const admin = require("./firebaseAdmin");
 
-const getAllUsers = async () => {
+const getAllUsers = async (pageToken) => {
   try {
-    // Fetch all users using the listUsers method
-    const userData = await admin.auth().listUsers();
+    // Fetch users with pagination
+    const userData = await admin.auth().listUsers(1000, pageToken);
 
-    // Ensure that userData and userData.users exist before calling map
     if (userData && userData.users) {
       const users = await Promise.all(
         userData.users.map(async (user) => {
-          const { customClaims } = await admin.auth().getUser(user.uid); // Corrected the property name
+          const { customClaims } = await admin.auth().getUser(user.uid);
           return {
             uid: user.uid,
             email: user.email,
             name: user.displayName || "No Name",
-            role: customClaims?.role || "user", // Fetch role or set default as "user"
+            photoURL : user.photoURL,
+            role: customClaims?.role || "user",
             lastActive: user.metadata?.lastSignInTime || "Never",
           };
         })
       );
-      return users; // Return the resolved users array
+      return { users, nextPageToken: userData.pageToken };
     } else {
       throw new Error("No users found.");
     }
   } catch (error) {
     console.error("Error fetching users:", error.message);
-    throw error; // Rethrow the error to be handled in the controller
+    throw error;
   }
 };
 
+exports.allUsers = async (req, res) => {
+  const { pageToken, searchTerm } = req.query;
 
-exports.allUsers=async(req,res)=>{
-    try {
-        const users = await getAllUsers(); // Fetch all users (uid and email only)
-        res.status(200).json({ users }); // Send the list of users in one response
-      } catch (error) {
-        res.status(500).json({ error: "Error fetching users" });
-      }
-}
+  try {
+    const { users, nextPageToken } = await getAllUsers(pageToken);
+
+    // Filter users by search term if provided
+    const filteredUsers = searchTerm
+      ? users.filter(user => user.name.toLowerCase().includes(searchTerm.toLowerCase()))
+      : users;
+
+    res.status(200).json({ users: filteredUsers, nextPageToken });
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching users" });
+  }
+};
 
 exports.updateRole = async (req, res) => {
   const { uid, role } = req.body;
@@ -47,9 +54,7 @@ exports.updateRole = async (req, res) => {
   }
 
   try {
-    // Update custom claims for the user
     await admin.auth().setCustomUserClaims(uid, { role });
-
     res.status(200).send({ message: `Role updated to ${role} for user ${uid}` });
   } catch (error) {
     console.error("Error updating role:", error);
