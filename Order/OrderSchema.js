@@ -10,7 +10,7 @@ const OrderSchema = new mongoose.Schema(
             type: String,
             required: true,    
         },
-        costomerID: {
+        customerId: {
             type: String,
             required: true,
         },
@@ -44,11 +44,11 @@ const OrderSchema = new mongoose.Schema(
             },
         ],
         totalPrice: {
-            type: Number,
-            required: true,
+            type: Number
         },
         status: {
             type: String,
+            require:true,
             enum: ['todo',"pending", "processing", "shipped", "delivered", "cancelled"],
             default: "todo",
         },
@@ -57,8 +57,7 @@ const OrderSchema = new mongoose.Schema(
             enum: ["cash", "card", ],
         },     
         deliveryAddress: {
-            type: String,
-            required: true,
+            type: String
         }
 
     },
