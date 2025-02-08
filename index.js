@@ -4,6 +4,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const adminRouter = require("./Firebase/adminRouter")
 const orderRoute = require("./Order/OrderRoute")
+const productsRoute = require("./Product/ProductRoute")
 const path = require("path");
 const connectDB = require("./Config/dbConfig");
 require("dotenv").config();
@@ -25,6 +26,7 @@ app.use(express.json());
 
 app.use('/api',adminRouter)
 app.use('/api',orderRoute)
+app.use('/api/products' , productsRoute)
 
 //  Home route
 app.get("/", (req, res) => {
