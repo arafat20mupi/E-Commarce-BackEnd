@@ -6,25 +6,20 @@ const ProductSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        productRating: {
-            type: String,
-            required: true,
-        },
         productCategory: {
             type: String,
-            required: true,
-        },
-        productPrice: {
-            type: Number,
             required: true,
         },
         productOriginalPrice: {
             type: Number,
             required: true,
         },
+        productPrice: {
+            type: Number,
+            required: true,
+        },
         productDiscount: {
             type: String,
-            required: true,
         },
         productDescription: {
             type: String,
@@ -34,10 +29,6 @@ const ProductSchema = new mongoose.Schema(
             type: String,
             required: true,
         }],
-        dressStyle: {
-            type: String,
-            required: true,
-        },
         productSizes: [{
             type: String,
             required: true,
@@ -66,23 +57,18 @@ const ProductSchema = new mongoose.Schema(
             {
                 name: {
                     type: String,
-                    required: true,
                 },
                 verified: {
                     type: Boolean,
-                    required: true,
                 },
                 stars: {
                     type: Number,
-                    required: true,
                 },
                 text: {
                     type: String,
-                    required: true,
                 },
                 date: {
                     type: String,
-                    required: true,
                 },
             },
         ],
@@ -92,7 +78,7 @@ const ProductSchema = new mongoose.Schema(
         },
         sales: {
             type: Number,
-            required: true,
+            default: 0,
         }
     },
     {
