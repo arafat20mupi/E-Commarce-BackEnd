@@ -58,8 +58,8 @@ const ProductSchema = new mongoose.Schema(
                 name: {
                     type: String,
                 },
-                verified: {
-                    type: Boolean,
+                email:{
+                    type: String,
                 },
                 stars: {
                     type: Number,
