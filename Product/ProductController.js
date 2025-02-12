@@ -121,7 +121,7 @@ exports.getProductById = async (req, res) => {
 
 exports.postReviews =async (req,res)=>{
   const {id}=req.params
-  const {name,email,stars,text,date}=req.body
+  const {name,email,stars,text,date , image}=req.body
   try {
     const product = await Product.findById(id);
     const review ={
@@ -129,7 +129,8 @@ exports.postReviews =async (req,res)=>{
       email,
       stars,
       text,
-      date
+      date, 
+      userPhoto: image,
       };
       product.reviews.push(review);
       await product.save();

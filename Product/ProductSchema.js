@@ -70,6 +70,9 @@ const ProductSchema = new mongoose.Schema(
                 date: {
                     type: String,
                 },
+                userPhoto: {
+                    type: String,
+                }
             },
         ],
         remainingProducts: {
