@@ -118,3 +118,24 @@ exports.getProductById = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 }
+
+exports.postReviews =async (req,res)=>{
+  const {id}=req.params
+  const {name,email,stars,text,date}=req.body
+  try {
+    const product = await Product.findById(id);
+    const review ={
+      name,
+      email,
+      stars,
+      text,
+      date
+      };
+      product.reviews.push(review);
+      await product.save();
+      res.status(201).json({ message: "Review added successfully", product })
+    
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
