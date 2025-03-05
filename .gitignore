@@ -1,0 +1,5 @@
+.env
+# Ignore service account key
+serviceAccountKey.json
+node_modules
+.vercel
