@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 connectDB();
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174"],
+    origin: ["http://localhost:5173", "http://localhost:5174" , "https://fastcart-five.vercel.app" , "https://fast-cart1.netlify.app"],
     methods: ["GET", "POST", "PUT", "DELETE","PATCH"],
     credentials: true,
   })
